@@ -18,6 +18,23 @@ export default function Home() {
     { id:'financial', title:'GOVT SCHEMES', sub:'Aarogyasri', desc:'Benefits & support', icon:'💰', color:'#7c3aed', count:'Free', path:'/hospitals' },
   ]
 
+  // MAWA NEW LOGIC - VOICE TO DOCTOR REDIRECT
+  const handleVoiceResult = (text) => {
+    setSearchText(text)
+    localStorage.setItem('userSymptom', text)
+    // 1.5 sec lo auto redirect to doctors
+    setTimeout(() => {
+      nav(`/doctors?symptom=${encodeURIComponent(text)}`)
+    }, 1500)
+  }
+
+  const handleSearchKey = (e) => {
+    if (e.key === 'Enter' && searchText.trim()) {
+      localStorage.setItem('userSymptom', searchText)
+      nav(`/doctors?symptom=${encodeURIComponent(searchText)}`)
+    }
+  }
+
   return (
     <div style={{ minHeight:'100vh', background:'#FFFEFB', paddingBottom:90, maxWidth:430, margin:'0 auto', position:'relative' }}>
       
@@ -46,19 +63,20 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 🎤 NEW VOICE SEARCH - MAWA PRO FEATURE */}
+      {/* VOICE SEARCH - AUTO REDIRECT */}
       <div style={{ padding:'14px 16px 0 16px' }}>
         <div style={{ background:'white', borderRadius:16, padding:'10px 12px', display:'flex', alignItems:'center', gap:8, border:'1.5px solid #0B4D2E', boxShadow:'0 4px 16px rgba(11,77,46,0.08)' }}>
           <span style={{ fontSize:16 }}>🔍</span>
           <input 
             value={searchText}
             onChange={(e)=>setSearchText(e.target.value)}
-            placeholder="మాట్లాడండి... / Type symptoms"
+            onKeyDown={handleSearchKey}
+            placeholder="మాట్లాడండి... / Type symptoms & press Enter"
             style={{ flex:1, border:'none', outline:'none', fontSize:13, fontWeight:600 }}
           />
-          <MicButton onResult={(text)=> setSearchText(text)} />
+          <MicButton onResult={handleVoiceResult} />
         </div>
-        {searchText && <p style={{ fontSize:11, color:'#0B4D2E', marginTop:6, fontWeight:700 }}>🎤 You said: {searchText}</p>}
+        {searchText && <p style={{ fontSize:11, color:'#0B4D2E', marginTop:6, fontWeight:700 }}>🎤 You said: {searchText} - Taking to doctor...</p>}
       </div>
 
       {/* SERVICES */}
