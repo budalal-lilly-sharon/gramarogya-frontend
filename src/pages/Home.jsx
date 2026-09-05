@@ -1,9 +1,12 @@
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import useAutoSpeak from '../hooks/useAutoSpeak'
 import BottomNav from '../components/BottomNav'
+import MicButton from '../components/MicButton'
 
 export default function Home() {
   const nav = useNavigate()
+  const [searchText, setSearchText] = useState('')
   useAutoSpeak('Welcome to GramArogya. Choose a service.')
 
   const cards = [
@@ -40,18 +43,22 @@ export default function Home() {
           </div>
           <h1 style={{ color:'white', fontWeight:900, fontSize:22, lineHeight:1.2 }}>Namaste! Ramesh 🙏</h1>
           <p style={{ color:'rgba(255,255,255,0.7)', fontSize:12, marginTop:4 }}>Your family health is secure today</p>
-          
-          <div style={{ display:'flex', gap:8, marginTop:14 }}>
-            <div style={{ flex:1, background:'rgba(255,255,255,0.1)', backdropFilter:'blur(12px)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:12, padding:'10px 12px' }}>
-              <p style={{ color:'rgba(255,255,255,0.6)', fontSize:9, fontWeight:800 }}>DOCTORS ONLINE</p>
-              <p style={{ color:'white', fontWeight:900, fontSize:14, marginTop:2 }}>6 <span style={{ fontWeight:600, fontSize:11, opacity:0.7 }}>Ready now</span></p>
-            </div>
-            <div style={{ flex:1, background:'white', borderRadius:12, padding:'10px 12px' }}>
-              <p style={{ color:'#6b7280', fontSize:9, fontWeight:800 }}>EMERGENCY</p>
-              <p style={{ color:'#dc2626', fontWeight:900, fontSize:14, marginTop:2 }}>108 <span style={{ fontWeight:700, fontSize:11 }}>Ready</span></p>
-            </div>
-          </div>
         </div>
+      </div>
+
+      {/* 🎤 NEW VOICE SEARCH - MAWA PRO FEATURE */}
+      <div style={{ padding:'14px 16px 0 16px' }}>
+        <div style={{ background:'white', borderRadius:16, padding:'10px 12px', display:'flex', alignItems:'center', gap:8, border:'1.5px solid #0B4D2E', boxShadow:'0 4px 16px rgba(11,77,46,0.08)' }}>
+          <span style={{ fontSize:16 }}>🔍</span>
+          <input 
+            value={searchText}
+            onChange={(e)=>setSearchText(e.target.value)}
+            placeholder="మాట్లాడండి... / Type symptoms"
+            style={{ flex:1, border:'none', outline:'none', fontSize:13, fontWeight:600 }}
+          />
+          <MicButton onResult={(text)=> setSearchText(text)} />
+        </div>
+        {searchText && <p style={{ fontSize:11, color:'#0B4D2E', marginTop:6, fontWeight:700 }}>🎤 You said: {searchText}</p>}
       </div>
 
       {/* SERVICES */}
@@ -69,15 +76,14 @@ export default function Home() {
               border: c.isEmergency? '1.5px solid #fecaca' : '1px solid #f3f4f6',
               boxShadow:'0 2px 12px rgba(0,0,0,0.04)',
               position:'relative', overflow:'hidden',
-              transition:'transform 0.15s'
             }}>
-              {c.isEmergency && <div style={{ position:'absolute', top:0, right:0, background:'#dc2626', color:'white', fontSize:8, fontWeight:900, padding:'4px 8px', borderBottomLeftRadius:10, letterSpacing:0.5 }}>● LIVE</div>}
-              <div style={{ width:44, height:44, background: c.isEmergency? '#fee2e2' : '#f0fdf4', borderRadius:12, display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, border:`1px solid ${c.isEmergency?'#fecaca':'#dcfce7'}` }}>{c.icon}</div>
-              <p style={{ fontWeight:900, fontSize:12, marginTop:12, color:'#111827' }}>{c.title}</p>
+              {c.isEmergency && <div style={{ position:'absolute', top:0, right:0, background:'#dc2626', color:'white', fontSize:8, fontWeight:900, padding:'4px 8px', borderBottomLeftRadius:10 }}>● LIVE</div>}
+              <div style={{ width:44, height:44, background: c.isEmergency? '#fee2e2' : '#f0fdf4', borderRadius:12, display:'flex', alignItems:'center', justifyContent:'center', fontSize:22 }}>{c.icon}</div>
+              <p style={{ fontWeight:900, fontSize:12, marginTop:12 }}>{c.title}</p>
               <p style={{ fontSize:10, color:c.color, fontWeight:800, marginTop:2 }}>{c.sub}</p>
               <p style={{ fontSize:10, color:'#9ca3af', marginTop:3 }}>{c.desc}</p>
               <div style={{ marginTop:10, display:'flex', alignItems:'center', gap:6 }}>
-                <span style={{ fontSize:9, fontWeight:800, color:c.isEmergency?'white':'white', background: c.isEmergency?'#dc2626':'#111827', padding:'4px 9px', borderRadius:100 }}>{c.count}</span>
+                <span style={{ fontSize:9, fontWeight:800, color:'white', background: c.isEmergency?'#dc2626':'#111827', padding:'4px 9px', borderRadius:100 }}>{c.count}</span>
                 <span style={{ fontSize:11 }}>→</span>
               </div>
             </div>
@@ -85,15 +91,13 @@ export default function Home() {
         </div>
       </div>
 
-      {/* EMERGENCY BANNER */}
-      <div style={{ margin:'0 16px', background:'#111827', borderRadius:16, padding:14, display:'flex', alignItems:'center', gap:12, position:'relative', overflow:'hidden' }}>
-        <div style={{ position:'absolute', inset:0, background:'radial-gradient(circle at 0% 50%, #dc2626 0%, transparent 60%)', opacity:0.5 }}></div>
-        <div style={{ width:42, height:42, background:'white', borderRadius:12, display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, position:'relative', zIndex:1 }}>🚑</div>
-        <div style={{ flex:1, position:'relative', zIndex:1 }}>
+      <div style={{ margin:'0 16px', background:'#111827', borderRadius:16, padding:14, display:'flex', alignItems:'center', gap:12 }}>
+        <div style={{ width:42, height:42, background:'white', borderRadius:12, display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>🚑</div>
+        <div style={{ flex:1 }}>
           <p style={{ color:'white', fontWeight:900, fontSize:12 }}>Need Ambulance?</p>
-          <p style={{ color:'rgba(255,255,255,0.6)', fontSize:10, marginTop:2 }}>Location auto-shared • 15 mins ETA</p>
+          <p style={{ color:'rgba(255,255,255,0.6)', fontSize:10 }}>Location auto-shared • 15 mins ETA</p>
         </div>
-        <button onClick={()=>nav('/emergency')} style={{ background:'#dc2626', color:'white', border:'none', padding:'10px 16px', borderRadius:100, fontWeight:900, fontSize:12, cursor:'pointer', position:'relative', zIndex:1, boxShadow:'0 4px 12px rgba(239,68,68,0.4)' }}>CALL 108</button>
+        <button onClick={()=>nav('/emergency')} style={{ background:'#dc2626', color:'white', border:'none', padding:'10px 16px', borderRadius:100, fontWeight:900, fontSize:12, cursor:'pointer' }}>CALL 108</button>
       </div>
 
       <BottomNav />
