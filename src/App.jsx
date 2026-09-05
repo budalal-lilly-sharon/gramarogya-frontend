@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import Doctors from './pages/Doctors'
 import Nearby from './pages/Nearby'
 import Pregnancy from './pages/Pregnancy'
+import FinancialSupport from './pages/FinancialSupport'
 
 function SplashScreen() {
   return (
@@ -276,6 +277,9 @@ export default function App() {
             <Route path="/childcare" element={<Childcare />} />
             <Route path="/emergency" element={<Emergency />} />
             <Route path="/108" element={<Emergency />} />
+            <Route path="/financial-support" element={<FinancialSupport />} />
+            <Route path="/schemes" element={<FinancialSupport />} />
+            <Route path="/government-schemes" element={<FinancialSupport />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
